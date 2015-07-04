@@ -1,24 +1,25 @@
 //
-//  ViewController.m
+//  RegistrationController.m
 //  Halalhubs
 //
-//  Created by Macbook Pro on 29/6/15.
+//  Created by Macbook Pro on 30/6/15.
 //  Copyright (c) 2015 Macbook Pro. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "RegistrationController.h"
 
-@interface ViewController ()
+@interface RegistrationController ()
 
 @end
-
-@implementation ViewController
-@synthesize EmailTextFiled,passwordTextField;
+@implementation RegistrationController
+@synthesize firstnameTextfield,lastnameTextField,emailTextField,userNameTextField,passwordTextField;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    EmailTextFiled.delegate=self;
+    firstnameTextfield.delegate=self;
+    lastnameTextField.delegate=self;
+    emailTextField.delegate=self;
+    userNameTextField.delegate=self;
     passwordTextField.delegate=self;
     passwordTextField.secureTextEntry=YES;
 }
@@ -28,44 +29,38 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-
-- (IBAction)LoginPressed:(UIButton *)sender {
-    [self CheckCustomerLoginFromServerhalal];
-
-}
-
-- (IBAction)RegistrationPressed:(UIButton *)sender {
-    RegistrationController * registrationController=(RegistrationController*)[self.storyboard instantiateViewControllerWithIdentifier:@"registration"];
-    
-    
-    [self.navigationController pushViewController:registrationController animated:YES];
-
-    
-}
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
-    
-    return YES;
+
+     return YES;
 }
 
+
+
+
+- (IBAction)SignUpPressed:(UIButton *)sender {
+    [self CheckCustomerLoginFromServerhalal];
+}
 
 -(NSDictionary*)CustomerLoginDatahalal{
     NSMutableDictionary *MutableDictionary=[[NSMutableDictionary alloc]init];
-    
-    if([EmailTextFiled.text isEqualToString:@""]||[passwordTextField.text isEqualToString:@""])
+
+    if([firstnameTextfield.text isEqualToString:@""]||[lastnameTextField.text isEqualToString:@""]||[emailTextField.text isEqualToString:@""]||[userNameTextField.text isEqualToString:@""]||[passwordTextField.text isEqualToString:@""])
     {
         UIAlertView * alert=[[UIAlertView alloc]initWithTitle:@"Alert!" message:@"Please Fill Up all the field" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         
     }
     else{
-        
-      [MutableDictionary setObject:EmailTextFiled.text forKey:@"identifier"];
-        
-        [MutableDictionary setObject:passwordTextField.text forKey:@"password"];
-        
-        NSLog(@"logindulicate halal%@",MutableDictionary);
+
+       [MutableDictionary setObject:firstnameTextfield.text forKey:@"firstName"];
+    [MutableDictionary setObject:lastnameTextField.text forKey:@"lastName"];
+    [MutableDictionary setObject:emailTextField.text forKey:@"email"];
+    [MutableDictionary setObject:userNameTextField.text forKey:@"username"];
+    
+    [MutableDictionary setObject:passwordTextField.text forKey:@"password"];
+    
+     NSLog(@"logindulicate halal%@",MutableDictionary);
     }
     
     return MutableDictionary;
@@ -76,9 +71,9 @@
     
     NSLog(@"logindulicate halal%@",[self CustomerLoginDatahalal]);
     NSString * halal=@"http://45.55.196.7:1337/auth/local/register";
-    NSString * halalbase=@"http://45.55.196.7:1337/auth/local";
-    NSString *HailRequestURL = [NSString stringWithFormat:@"%@",halalbase] ;
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:halalbase]];
+    NSString * halalbase=@"http://45.55.196.7:1337/auth/local/";
+    NSString *HailRequestURL = [NSString stringWithFormat:@"%@",halal] ;
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:halal]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
     NSMutableURLRequest *request = [httpClient requestWithMethod:@"POST"
                                                             path:HailRequestURL
@@ -103,5 +98,4 @@
     
     
 }
-
 @end
